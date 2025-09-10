@@ -512,4 +512,4 @@ Select Max(emp_salary) from Employees  where emp_salary<(Select MAX(emp_salary) 
  Select emp_salary AS EMP_SALARY from Employees;
  Select * from Employees;
 
- select count(*) from Employees ;
+
