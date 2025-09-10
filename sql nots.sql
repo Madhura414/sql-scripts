@@ -512,4 +512,14 @@ Select Max(emp_salary) from Employees  where emp_salary<(Select MAX(emp_salary) 
  Select emp_salary AS EMP_SALARY from Employees;
  Select * from Employees;
 
+1. find duplicate records in a table 
+Select emp_id ,emp_name ,count(*)
+from Employees
+Group by emp_id,emp_name
+Having count(*)>1;
+
+SELECT emp_number, COUNT(*)
+FROM Employees
+GROUP BY emp_number
+HAVING COUNT(*) > 1;
 
