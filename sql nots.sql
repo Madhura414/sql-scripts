@@ -545,3 +545,86 @@ WHERE CONVERT(FLOAT, emp_salary) > (
 );
 
 
+-------------------
+--Question 1: What are the different types of JOINs in SQL?
+Answer: INNER JOIN, LEFT JOIN, RIGHT JOIN, FULL JOIN.
+
+INNER JOIN returns matching rows between tables.
+
+LEFT JOIN returns all from left table plus matches from right.
+
+RIGHT JOIN returns all from right table plus matches from left.
+
+FULL JOIN returns all rows where there is a match in one of the tables.
+
+--Question 2: Write a query to find the second highest salary from the Employee table.
+
+Select max(emp_salary)from Employees where emp_salary<(Select Max(emp_salary)from Employees);
+
+Question 3: How to find duplicate records in a table?
+sql
+SELECT emp_name, COUNT(*)
+FROM Employees
+GROUP BY emp_name
+HAVING COUNT(*) > 1;
+Question 4: Difference between UNION and UNION ALL.
+Answer: UNION removes duplicates while UNION ALL includes all duplicates.
+
+Question 5: What does the GROUP BY clause do?
+Answer: It groups rows that have the same values in specified columns into aggregated data like sums or counts.
+
+Question 6: Write a query to get employees who earn more than the average salary.
+sql
+SELECT * FROM Employees
+WHERE emp_salary > (SELECT AVG(emp_salary) FROM Employees);
+
+Question 1: Explain the difference between ROW_NUMBER(), RANK(), and DENSE_RANK() window functions. Write example queries.
+
+Answer:
+
+ROW_NUMBER() assigns unique sequential numbers; no ties.
+
+RANK() assigns same rank to ties but skips ranks for next.
+
+DENSE_RANK() assigns same rank to ties but no skips in ranks.
+
+Example:
+
+sql
+SELECT emp_name, emp_salary,
+       ROW_NUMBER() OVER (ORDER BY emp_salary DESC) AS RowNum,
+       RANK() OVER (ORDER BY emp_salary DESC) AS RankNum,
+       DENSE_RANK() OVER (ORDER BY emp_salary DESC) AS DenseRankNum
+FROM Employees;
+Question 2: Write a recursive SQL query to generate a series of numbers from 1 to 10.
+
+sql
+WITH RECURSIVE NumberSeries AS (
+  SELECT 1 AS num
+  UNION ALL
+  SELECT num + 1
+  FROM NumberSeries
+  WHERE num < 10
+)
+SELECT * FROM NumberSeries;
+Question 3: How would you find the employees who do not have any reporting manager? (Assuming a column manager_id)
+
+sql
+SELECT emp_name
+FROM Employees
+WHERE manager_id IS NULL;
+Question 4: Explain normalization and mention the differences between 1NF, 2NF, and 3NF.
+
+Answer:
+
+1NF: Eliminate repeating groups, ensure atomicity.
+
+2NF: Meet 1NF criteria + every non-key column fully dependent on primary key.
+
+3NF: Meet 2NF + no transitive dependency on primary key.
+
+Question 5: How can indexes improve query performance? When might they slow it down?
+
+Answer:
+Indexes speed up search queries by reducing data scanned.
+However, they slow down INSERT, UPDATE, and DELETE operations because indexes need updating.
