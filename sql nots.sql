@@ -412,6 +412,13 @@ ON table_name (column1, column2, ...);
 
 
 
+ SELECT emp_name, emp_number, MAX(emp_salary) AS emp_salary
+FROM Employees
+WHERE emp_name = 'smith'
+GROUP BY emp_name, emp_number
+ORDER BY emp_salary DESC;
+
+
 
 CREATE UNIQUE INDEX index_name
 ON table_name (column1, column2, ...)
@@ -522,4 +529,19 @@ SELECT emp_number, COUNT(*)
 FROM Employees
 GROUP BY emp_number
 HAVING COUNT(*) > 1;
+
+
+-->1. Write a SQL query to find employees whose salary is greater than the average salary of employees in their respective location.
+select emp_salary, emp_name, emp_jobname  from employees  e1 
+where emp_salary>
+(Select avg(emp_salary) from employees  e2  where  e2.emp_jobname = e1.emp_jobname);
+
+SELECT emp_salary, emp_name, emp_jobname
+FROM employees e1
+WHERE CONVERT(FLOAT, emp_salary) > (
+  SELECT AVG(CONVERT(FLOAT, emp_salary))
+  FROM employees e2
+  WHERE e2.emp_jobname = e1.emp_jobname
+);
+
 
