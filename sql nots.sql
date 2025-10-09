@@ -627,4 +627,4 @@ Question 5: How can indexes improve query performance? When might they slow it d
 
 Answer:
 Indexes speed up search queries by reducing data scanned.
-However, they slow down INSERT, UPDATE, and DELETE operations because indexes need updating.
+However, they slow down INSERT, UPDATE, and DELETE operations because indexes need update.
