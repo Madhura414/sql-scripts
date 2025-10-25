@@ -49,7 +49,19 @@ Triggers are stored procedures that automatically execute when a specific event 
 They're used to maintain data integrity, enforce business rules, or log changes.
 
 6. Stored procedure in SQL
-A stored procedure is a prepared SQL code that you can save and reuse. Benefits include:
+A stored procedure is a prepared SQL code that you can save and reuse. over and over again . Benefits include:
+
+CREATE PROCEDURE 
+SelectAllOrders
+AS
+Select *from Orders
+Go;
+
+EXEC SelectAllOrder;
+
+[EXEC: ITS EXECUTE ]
+
+
 
 Improved performance (precompiled)
 

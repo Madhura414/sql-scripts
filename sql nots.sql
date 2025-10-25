@@ -47,6 +47,13 @@ date data type
 -->2.Constraints:  we can achecive the data intigrity by using of constraints  constraints can be either colum level an table level
 colomn level applied only coumn level .
 where table level applied entire table .
+1.Unique
+2.not null
+3. primary key 
+4.foregin key 
+5.Check constrints
+
+
 
 
 =========================================
@@ -124,12 +131,13 @@ Flashback table tablename to before Drop;
 Purge table tablename;
 
 ALTER - CHANGES FOR THE STRUCTURE OF THE TABLE 
-1.Add- alter table tablenmae ADD Colunname;
-ex:alter table Employee ADD Locationvarchar(20);
-2.Delete-alter table tablename Drop  columnname ;
-Ex: alter table Employee Drop location;
-3.Reaname: alter table tablename RENAME Clounm existing column name to new column name;
-ex:alter table Employee Rename location to locationname;
+1.Add- alter table tablenmae ADD Colunname datatype;
+ex:alter table Employee ADD Location varchar(20);
+2.Drop-alter table tablename Drop  cloumn columnname ;
+Ex: alter table Employee Drop Column location;
+3.Reaname: alter table tablename RENAME  column   old_name to new column name;
+EXEC Sp_rename 'table_name.old_name','New_name','Column';
+
 
 DML :INSERT ,UPDATE,DELETE
 INSERT: insert into tablename (cloumn1 )values(v1);
@@ -226,6 +234,7 @@ FROM TABLENAME
 WHERE CONDITION
 GROUP BY COLUMNNAME
 ORDER BY COLUMNNAME;
+
 
 Write a query to calculate the total sales for each month using `GROUP BY`
 Select emp_number ,avg(emp_salary) from Employees GROUP BY emp_number;
@@ -583,6 +592,7 @@ Question 1: Explain the difference between ROW_NUMBER(), RANK(), and DENSE_RANK(
 Answer:
 
 ROW_NUMBER() assigns unique sequential numbers; no ties.
+
 
 RANK() assigns same rank to ties but skips ranks for next.
 
