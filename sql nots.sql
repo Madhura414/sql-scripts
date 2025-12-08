@@ -315,6 +315,10 @@ Select OrderDate
 from Orders
 inner join Customers on Orders.CustomerID= Customers.CustomerID;
 
+Select e.OrderDate ,c.CustomerID
+from Orders e
+INNER JOIN  Customers c On e.CustomerID=c.CustomerID;
+
 SELECT column_name(s)
 FROM table1
 LEFT JOIN table2
