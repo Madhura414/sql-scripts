@@ -52,7 +52,7 @@ They're used to maintain data integrity, enforce business rules, or log changes.
 A stored procedure is a prepared SQL code that you can save and reuse. over and over again . Benefits include:
 
 CREATE PROCEDURE 
-SelectAllOrders
+SelectAllOrdersss
 AS
 Select *from Orders
 Go;

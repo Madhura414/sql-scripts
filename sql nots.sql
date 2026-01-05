@@ -1,3 +1,8 @@
+﻿
+
+/*it will check the Database tables */
+SELECT name, state_desc 
+FROM sys.databases;
 
 sql:
 DBMS: insertion,updation,deletion 
@@ -158,6 +163,8 @@ Having: while HAVING filters groups after they have been created by GROUP BY and
 Where : 
 
 
+
+
  7. Explain how HAVING differs from WHERE, with examples.
 
 DISTINCT: which is used to remove the duplicate records from result set.
@@ -205,6 +212,8 @@ Single row: Char: CASE MANUPULATION(upper,lower,INIT,CAP)
             char: CHARACTER MANUPULATION(substr,instr,concat,length,replace,trim) 
 			date(TOCHAR,TODATE)
 			General(NVL,NVL2)
+--aggereate function summarize the large datasets.
+--combine with them GROUP BY to analyze grouped data
 Multi Row/aggrigate/group by: MAX,MIN,AVG,SUM,COUNT,
 MIN() - returns the smallest value within the selected column
 MAX() - returns the largest value within the selected column
@@ -214,8 +223,10 @@ AVG() - returns the average value of a numerical column
 */
 SELECT SUBSTRING('SQL Tutorial', 1, 3) AS ExtractString;
 Select SUBSTRING ('MADHURA' ,1 ,3) from Employees;
-SELECT LENGTH("SQL Tutorial") AS LengthOfString;
+SELECT LENGTH ("SQL Tutorial") AS LengthOfString;
 Select LENGTH  ('SMITH') FROM Employees;
+
+select LENGTH ''MADHURA'' AS lengthstring;
 
 Heighest salary from Employee table?
 Select *from Employees;
@@ -311,13 +322,24 @@ from Orders
 inner join Customers
 ON Orders.CustomerID= Customers.CustomerID;
 
-Select OrderDate
+Select OrderDate,CustomerID
 from Orders
 inner join Customers on Orders.CustomerID= Customers.CustomerID;
-
+----this is correct
 Select e.OrderDate ,c.CustomerID
 from Orders e
 INNER JOIN  Customers c On e.CustomerID=c.CustomerID;
+
+select *from Orders;
+
+select *from Employees
+
+
+SELECT Customers.CustomerName
+	,Orders.OrderID
+FROM Customers
+INNER JOIN Orders ON Customers.CustomerID = Orders.CustomerID
+ORDER BY Customers.CustomerName;
 
 SELECT column_name(s)
 FROM table1
@@ -436,16 +458,36 @@ ORDER BY emp_salary DESC;
 CREATE UNIQUE INDEX index_name
 ON table_name (column1, column2, ...)
 
-Create INDEX Temporary
+Create INDEX Temporary1
 ON Employees (emp_number)
 
 select *from Employees;
-select *from Temporary;
+select *from Temporary1;
+---what is table : table contains of rows and columns 
+-
 
+A clustered index--- :stores data physically in sorted order. Only one per table.
+
+CREATE TABLE Employment (
+   EmpID INT PRIMARY KEY,   -- This becomes Clustered index
+   Name VARCHAR(50),
+   Salary INT
+);
+select *from Employment
+
+A non-clustered index ---:creates a separate index structure and points to the data. 
+--You can create many non-clustered indexes.
+
+CREATE NONCLUSTERED INDEX idx_emp_salary
+ON Employees (emp_salary);
+------------------
 
 ---view : view is virtual table based on result set of sql statement.
 --vew contains rows and columns just like real table, in a view fields from one or more real table on the database.
 --we can add sql statement functions views present data   users coming from one sigle table.
+---hiding unwanted unnesary data
+--- its a representaila from collected data from actual data
+---u can take example netflix   and explain 
 CREATE VIEW view_name AS
 SELECT column1, column2, ...
 FROM table_name
@@ -493,8 +535,13 @@ UNION  ALL
 Select emp_salary from Players
  OrderID BY emp_salary;
 
-Triggers: triggers is a special type of store procedure that automatically runs when an event occurs in the database server.
+Triggers: triggers is a special type of store procedure that automatically runs 
+when an event occurs in the database server.
+
+A Trigger is a special type of stored procedure that automatically runs 
+when a specific event (INSERT, UPDATE, DELETE) happens on a table.”
 --------------------
+Trigger is set of sql statement that can 
 
 
 manipulation and presentation.
@@ -544,7 +591,8 @@ GROUP BY emp_number
 HAVING COUNT(*) > 1;
 
 
--->1. Write a SQL query to find employees whose salary is greater than the average salary of employees in their respective location.
+-->1. Write a SQL query to find employees whose salary is greater
+--->than the average salary of employees in their respective location.
 select emp_salary, emp_name, emp_jobname  from employees  e1 
 where emp_salary>
 (Select avg(emp_salary) from employees  e2  where  e2.emp_jobname = e1.emp_jobname);
@@ -591,6 +639,30 @@ sql
 SELECT * FROM Employees
 WHERE emp_salary > (SELECT AVG(emp_salary) FROM Employees);
 
+
+Window functions :
+--1.LAG : fetch data from previous row in the window 
+ex: select emp_salary as salary,
+LAG(emp_salary) OVER (ORDER BY emp_salary ASC) AS previous_salary  from Employees ;
+
+select *from Employees;
+
+-- If you want previous employee in same department, hired before
+SELECT 
+    emp_id AS EmployeeID,
+    LAG(emp_id) OVER (PARTITION BY emp_salary ORDER BY emp_hiredate) AS Previous_EmployeeID
+FROM Employees;
+
+-- If you want just overall previous employee in the company
+SELECT 
+    emp_id AS EmployeeID,
+    LAG(emp_id) OVER (ORDER BY emp_id) AS Previous_EmployeeID  -- or ORDER BY hire_date
+FROM Employees;
+
+--2 LEAD : fetch data from next row in the window 
+ex:  select emp_salary as salary , 
+LEAD (emp_salary ) OVER (ORDER BY emp_salary DESC) AS next_salary from Employees;
+
 Question 1: Explain the difference between ROW_NUMBER(), RANK(), and DENSE_RANK() window functions. Write example queries.
 
 Answer:
@@ -599,8 +671,12 @@ ROW_NUMBER() assigns unique sequential numbers; no ties.
 
 
 RANK() assigns same rank to ties but skips ranks for next.
-
+ 
 DENSE_RANK() assigns same rank to ties but no skips in ranks.
+
+ROW_NUMBER → 1,2,3,4
+RANK → 1,2,2,4 (gaps)
+DENSE_RANK → 1,2,2,3 (no gaps)
 
 Example:
 
@@ -612,6 +688,8 @@ SELECT emp_name, emp_salary,
 FROM Employees;
 Question 2: Write a recursive SQL query to generate a series of numbers from 1 to 10.
 
+
+
 sql
 WITH RECURSIVE NumberSeries AS (
   SELECT 1 AS num
@@ -621,7 +699,8 @@ WITH RECURSIVE NumberSeries AS (
   WHERE num < 10
 )
 SELECT * FROM NumberSeries;
-Question 3: How would you find the employees who do not have any reporting manager? (Assuming a column manager_id)
+Question 3: How would you find the employees 
+who do not have any reporting manager? (Assuming a column manager_id)
 
 sql
 SELECT emp_name
@@ -642,3 +721,95 @@ Question 5: How can indexes improve query performance? When might they slow it d
 Answer:
 Indexes speed up search queries by reducing data scanned.
 However, they slow down INSERT, UPDATE, and DELETE operations because indexes need update.
+
+---select *from Orders;
+----select *from customers
+1. sql - user(id,name) orders(id, userId, amount)
+total orders of each users
+
+select u.CustomerID ,count(*) as Total_users
+from Customers u
+left join Orders o on u.CustomerID= o.CustomerID
+GROUP BY u.CustomerID
+ORDER BY Total_users DESC;
+
+2. Find the average total amount 
+SELECT AVG(TRY_CAST(emp_salary AS DECIMAL(18,2))) AS average_total_amount
+FROM Employees;
+
+3. List the users are greater than total amount average
+4. Find the second high salary from the above list
+
+SELECT 
+    name AS employee_name,
+    emp_salary
+    AVG(TRY_CAST(emp_salary) AS DECIMAL(18,2)) OVER () AS average_total_amount
+FROM Employees
+WHERE emp_salary > AVG(TRY_CAST(emp_salary) AS DECIMAL(18,2)) OVER ()
+ORDER BY emp_salary DESC ;
+
+SELECT MAX(emp_salary) AS  second_highest_
+FROM Employees
+WHERE (emp_salary) < (SELECT MAX(emp_salary)FROM Employees );
+=======================
+SELECT salary AS second_highest_salary
+FROM (
+    SELECT emp_salary  AS salary
+    FROM Employees
+    WHERE emp_salary AS DECIMAL > (
+        SELECT AVG(emp_salary)
+        FROM Employees
+    )
+    ORDER BY (emp_salary ) DESC
+    OFFSET 1 ROW
+    FETCH NEXT 1 ROW ONLY
+) AS t;
+ 
+-----------------------
+WITH AboveAverage AS (
+    SELECT TRY_CAST(emp_salary AS DECIMAL(18,2)) AS salary_num
+    FROM Employees
+    WHERE TRY_CAST(emp_salary AS DECIMAL(18,2)) > (
+        SELECT AVG(TRY_CAST(emp_salary AS DECIMAL(18,2)))
+        FROM Employees 
+    )
+)
+SELECT MAX(salary_num) AS second_highest
+FROM AboveAverage
+WHERE salary_num < (SELECT MAX(salary_num) FROM AboveAverage);
+
+==================================
+WITH AboveAverage AS (
+    SELECT TRY_CAST(emp_salary AS DECIMAL(18,2)) AS salary_num
+    FROM Employees
+    WHERE TRY_CAST(emp_salary AS DECIMAL(18,2)) > (
+        SELECT AVG(TRY_CAST(emp_salary AS DECIMAL(18,2)))
+        FROM Employees
+    )
+)
+SELECT salary_num AS second_highest_salary
+FROM AboveAverage
+ORDER BY salary_num DESC
+OFFSET 2 ROW 
+FETCH NEXT 1 ROW ONLY;
+        
+
+
+
+4. Find the second high salary from the above list
+select max(emp_salary) from Employees where emp_salary<(Select max(emp_salary) from Employees);
+
+5. Write a query to find the count of employees working in each department. (GROUP BY)
+--select *from Employees;
+select emp_jobname,emp_name,
+count(*) as emp_count
+from Employees 
+Group by emp_jobname ,emp_name
+--having count(*)>1
+order by emp_jobname ;
+
+
+Select emp_number ,COUNT(*)
+ AS count from Employees
+ GROUP BY  emp_number
+ HAVING COUNT(*)>1;
